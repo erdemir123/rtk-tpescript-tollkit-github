@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { ıUser } from "../components/models/model";
+import { useWaiting } from "../components/Waiting";
+import { ıUser } from "../models/model";
 import { useSearchUsersQuery } from "../store/github/github.api";
 
 const HomePage = () => {
-    const [search, setSearch] = useState<string>("");
-  const { isError, isLoading, data } = useSearchUsersQuery(`${search}`);
+  const [search, setSearch] = useState<string>("");
+  const waiting = useWaiting(search)
+  const { isError, isLoading, data } = useSearchUsersQuery(
+    `${waiting}`,{skip:waiting.length <3}
+  );
   const [user, setUser] = useState<ıUser[] | []>([]);
   
-  console.log(data?.items);
-  useEffect(() => {
-    console.log(search)
-    console.log(isError)
-  }, [user]);
+  useEffect(()=>{
+    console.log(waiting)
+    console.log(data?.items);
+  },[waiting])
   return (
     <div className="flex justify-center items-center pt-10 mx-auto h-screen w-screen">
       {isError && (
