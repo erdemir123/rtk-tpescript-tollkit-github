@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useAppDispatch } from "../app/hooks";
 import ReposCard from "../components/ReposCard";
 import { useWaiting } from "../components/Waiting";
 import { ıUser } from "../models/model";
@@ -24,8 +25,10 @@ const HomePage = () => {
   const handleClick = (username: string) => {
     setUser(username);
   };
-  const { data: repos, isLoading: areReposLoading } =
-    useGetUsersReposQuery(user);
+  const { data: repos, isLoading: areReposLoading } = useGetUsersReposQuery(
+    user,
+    { skip: waiting.length < 3 }
+  );
 
   return (
     <div className="flex justify-center  pt-10 h-screen mx-auto">
@@ -53,7 +56,7 @@ const HomePage = () => {
             </li>
           ))}
         </ul>
-        <div className="container mt-48 border absolute">
+        <div className="container mt-52 absolute">
           {areReposLoading && (
             <p className="text-center">Repos are Loading...</p>
           )}
